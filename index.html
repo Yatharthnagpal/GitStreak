@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyan">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitPulse | Precision GitHub Contribution Engine</title>
+    <meta
+      name="description"
+      content="GitPulse is a state-of-the-art GitHub contribution engine and activity scheduler with real-time heatmap preview, time jitter realism, and OAuth authentication."
+    />
+    <link rel="icon" type="image/png" href="gitpulse_logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Tech Fonts: Outfit for Display, Plus Jakarta Sans for UI, JetBrains Mono for Code/Stats -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Ambient Cyber Glow Mesh Canvas -->
+    <div class="glow-orb orb-primary"></div>
+    <div class="glow-orb orb-secondary"></div>
+    <div class="glow-orb orb-accent"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="page-shell">
+      <header class="topbar glass-panel">
+        <div class="brand-wrap">
+          <div class="brand-mark pulse-glow">
+            <img src="gitpulse_logo.png" alt="GitPulse Logo" class="brand-logo-img" />
+          </div>
+          <div>
+            <div class="brand-name">GitPulse</div>
+            <div class="brand-subtitle">Precision Developer Studio</div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Live Theme Accent Switcher -->
+          <div class="theme-switcher-bar" title="Switch UI Accent Theme">
+            <span class="theme-label"><i class="ph-bold ph-palette"></i></span>
+            <button type="button" class="theme-dot theme-dot-cyan active" data-theme="cyan" title="Electric Cyan"></button>
+            <button type="button" class="theme-dot theme-dot-emerald" data-theme="emerald" title="Matrix Emerald"></button>
+            <button type="button" class="theme-dot theme-dot-purple" data-theme="purple" title="Cyber Purple"></button>
+            <button type="button" class="theme-dot theme-dot-amber" data-theme="amber" title="Solar Gold"></button>
+          </div>
+
+          <div class="topbar-actions">
+            <button class="ghost-button" id="apiConfigBtn" type="button" title="Configure custom backend API endpoint">
+              <i class="ph-bold ph-gear"></i> Settings
+            </button>
+            <button class="ghost-button" id="signOutBtn" type="button" style="display: none;">
+              <i class="ph-bold ph-sign-out"></i> Sign out
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="app-grid">
+        <!-- SPLIT-HERO AUTH LANDING PANEL -->
+        <section class="panel auth-panel glass-panel" id="authPanel">
+          <div class="auth-hero-split">
+            <!-- LEFT COLUMN: HERO COPY & AUTH ACTIONS -->
+            <div class="hero-left-col">
+              <span class="neon-eyebrow">
+                <i class="ph-bold ph-shield-check"></i> Direct GitHub OAuth 2.0 Handshake
+              </span>
+              <h1>Architect your GitHub contribution legacy.</h1>
+              <p class="hero-desc">
+                Connect your GitHub account, design high-precision commit cadences, and engineer realistic contribution activity with live 52-week graph previews.
+              </p>
+
+              <div class="hero-feature-cards">
+                <div class="hero-f-card">
+                  <div class="hero-f-icon-box">
+                    <i class="ph-bold ph-lock-key"></i>
+                  </div>
+                  <div class="hero-f-content">
+                    <strong class="hero-f-title">OAuth Protected</strong>
+                    <p class="hero-f-desc">Secure sign-in via GitHub. Zero credentials stored.</p>
+                  </div>
+                </div>
+
+                <div class="hero-f-card">
+                  <div class="hero-f-icon-box">
+                    <i class="ph-bold ph-calendar-plus"></i>
+                  </div>
+                  <div class="hero-f-content">
+                    <strong class="hero-f-title">Precision Scheduling</strong>
+                    <p class="hero-f-desc">Choose dates, apply complex filters, and use intelligent randomization.</p>
+                  </div>
+                </div>
+
+                <div class="hero-f-card">
+                  <div class="hero-f-icon-box">
+                    <i class="ph-bold ph-code"></i>
+                  </div>
+                  <div class="hero-f-content">
+                    <strong class="hero-f-title">True Backdating</strong>
+                    <p class="hero-f-desc">Direct integration with the Git Database API for perfect graph alignment.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="auth-panel-actions">
+                <button id="githubLoginBtn" class="primary-button neon-button" type="button">
+                  <i class="ph-bold ph-github-logo"></i> Continue with GitHub
+                </button>
+                <div id="authStatus" class="status" aria-live="polite">
+                  <i class="ph-bold ph-info"></i> Connect your GitHub account to begin.
+                </div>
+                <div class="pat-auth-toggle">
+                  <button type="button" id="patAuthToggleBtn" class="ghost-button pat-toggle-btn">
+                    <i class="ph-bold ph-key"></i> Or connect with Personal Access Token
+                  </button>
+                </div>
+                <div id="patAuthForm" class="pat-auth-box hidden">
+                  <div class="input-wrap">
+                    <i class="ph ph-key"></i>
+                    <input type="password" id="patTokenInput" placeholder="Enter GitHub Personal Access Token (ghp_...)" />
+                  </div>
+                  <button type="button" id="patSubmitBtn" class="primary-button neon-button" style="margin-top: 8px; width: 100%;">Connect Token</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN: INTERACTIVE MINI HEATMAP GRAPHIC -->
+            <div class="hero-right-col">
+              <div class="mini-heatmap-card glass-panel">
+                <div class="mini-card-header">
+                  <div class="mini-card-title">
+                    <span class="live-dot pulse-dot"></span> Studio Live Preview
+                  </div>
+                  <span class="mini-badge">52 Weeks Active</span>
+                </div>
+
+                <div class="mini-grid-wrap">
+                  <div class="mini-matrix-grid">
+                    <!-- Decorative Mini Matrix Cells -->
+                    <div class="m-cell l-0"></div><div class="m-cell l-1"></div><div class="m-cell l-2"></div><div class="m-cell l-3"></div><div class="m-cell l-4"></div>
+                    <div class="m-cell l-1"></div><div class="m-cell l-3"></div><div class="m-cell l-4"></div><div class="m-cell l-2"></div><div class="m-cell l-0"></div>
+                    <div class="m-cell l-2"></div><div class="m-cell l-4"></div><div class="m-cell l-1"></div><div class="m-cell l-0"></div><div class="m-cell l-3"></div>
+                    <div class="m-cell l-3"></div><div class="m-cell l-0"></div><div class="m-cell l-4"></div><div class="m-cell l-2"></div><div class="m-cell l-4"></div>
+                    <div class="m-cell l-4"></div><div class="m-cell l-2"></div><div class="m-cell l-3"></div><div class="m-cell l-1"></div><div class="m-cell l-2"></div>
+                    <div class="m-cell l-0"></div><div class="m-cell l-1"></div><div class="m-cell l-2"></div><div class="m-cell l-4"></div><div class="m-cell l-3"></div>
+                    <div class="m-cell l-2"></div><div class="m-cell l-3"></div><div class="m-cell l-0"></div><div class="m-cell l-3"></div><div class="m-cell l-4"></div>
+                    <div class="m-cell l-4"></div><div class="m-cell l-1"></div><div class="m-cell l-2"></div><div class="m-cell l-4"></div><div class="m-cell l-1"></div>
+                    <div class="m-cell l-1"></div><div class="m-cell l-4"></div><div class="m-cell l-3"></div><div class="m-cell l-2"></div><div class="m-cell l-0"></div>
+                    <div class="m-cell l-3"></div><div class="m-cell l-2"></div><div class="m-cell l-4"></div><div class="m-cell l-1"></div><div class="m-cell l-3"></div>
+                    <div class="m-cell l-4"></div><div class="m-cell l-0"></div><div class="m-cell l-1"></div><div class="m-cell l-3"></div><div class="m-cell l-4"></div>
+                    <div class="m-cell l-2"></div><div class="m-cell l-3"></div><div class="m-cell l-4"></div><div class="m-cell l-0"></div><div class="m-cell l-2"></div>
+                    <div class="m-cell l-0"></div><div class="m-cell l-2"></div><div class="m-cell l-3"></div><div class="m-cell l-4"></div><div class="m-cell l-1"></div>
+                    <div class="m-cell l-4"></div><div class="m-cell l-1"></div><div class="m-cell l-0"></div><div class="m-cell l-2"></div><div class="m-cell l-3"></div>
+                    <div class="m-cell l-3"></div><div class="m-cell l-4"></div><div class="m-cell l-2"></div><div class="m-cell l-1"></div><div class="m-cell l-4"></div>
+                  </div>
+                </div>
+
+                <div class="mini-card-stats">
+                  <div class="m-stat">
+                    <span>Target Volume</span>
+                    <strong>1,240 Commits</strong>
+                  </div>
+                  <div class="m-stat">
+                    <span>Consistency Rate</span>
+                    <strong>98.4%</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- DUAL-COLUMN DEVELOPER STUDIO PANEL -->
+        <section class="panel scheduler-panel glass-panel hidden" id="schedulerPanel">
+          <div class="studio-layout">
+            <!-- LEFT COLUMN: CONTROL CONSOLE & TABS -->
+            <div class="studio-left">
+              <div class="panel-header">
+                <div>
+                  <div class="neon-eyebrow"><i class="ph-bold ph-user-circle"></i> Authenticated Identity</div>
+                  <h2 id="userSummary">GitHub account</h2>
+                </div>
+                <div class="header-pills">
+                  <span class="status-pill" id="connectionStatus">
+                    <span class="pulse-dot"></span> Connected
+                  </span>
+                </div>
+              </div>
+
+              <!-- QUICK STRATEGY PRESET CHIPS -->
+              <div class="strategy-section-title"><i class="ph-bold ph-lightning-fill"></i> 1-Click Strategy Presets</div>
+              <div class="strategy-preset-grid">
+                <button type="button" class="strategy-card tilt-card" data-preset="consistent">
+                  <div class="strategy-icon">🚀</div>
+                  <div class="strategy-name">Consistent Daily</div>
+                  <div class="strategy-desc">5 commits/day across 7 days</div>
+                </button>
+
+                <button type="button" class="strategy-card tilt-card" data-preset="weekday">
+                  <div class="strategy-icon">⚡</div>
+                  <div class="strategy-name">Weekday Shift</div>
+                  <div class="strategy-desc">7 commits/day, Mon–Fri</div>
+                </button>
+
+                <button type="button" class="strategy-card tilt-card" data-preset="weekend">
+                  <div class="strategy-icon">🌴</div>
+                  <div class="strategy-name">Weekend Warrior</div>
+                  <div class="strategy-desc">10 commits/day, Sat–Sun</div>
+                </button>
+
+                <button type="button" class="strategy-card tilt-card" data-preset="burst">
+                  <div class="strategy-icon">🎲</div>
+                  <div class="strategy-name">Random Burst</div>
+                  <div class="strategy-desc">1–12 randomized commits</div>
+                </button>
+              </div>
+
+              <form id="commitForm" style="margin-top: 14px;">
+                <!-- SEGMENTED CONTROL TABS -->
+                <div class="tab-control-bar">
+                  <button type="button" class="tab-btn active" data-tab="tabSchedule">
+                    <i class="ph-bold ph-calendar"></i> Schedule
+                  </button>
+                  <button type="button" class="tab-btn" data-tab="tabRealism">
+                    <i class="ph-bold ph-magic-wand"></i> Realism
+                  </button>
+                  <button type="button" class="tab-btn" data-tab="tabRepo">
+                    <i class="ph-bold ph-git-branch"></i> Repository
+                  </button>
+                </div>
+
+                <!-- TAB 1: SCHEDULE & RANGE -->
+                <div class="tab-pane active" id="tabSchedule">
+                  <div class="field-grid two-col">
+                    <label>
+                      Start Date
+                      <div class="input-wrap">
+                        <i class="ph ph-calendar"></i>
+                        <input type="date" id="startDate" required />
+                      </div>
+                    </label>
+
+                    <label>
+                      End Date
+                      <div class="input-wrap">
+                        <i class="ph ph-calendar"></i>
+                        <input type="date" id="endDate" required />
+                      </div>
+                    </label>
+                  </div>
+
+                  <!-- VOLUME MODE SELECTOR -->
+                  <div class="inner-panel" style="margin-top: 10px;">
+                    <label class="compact-label">Volume & Randomization Mode</label>
+                    <div class="input-wrap select-wrap">
+                      <i class="ph ph-sliders-horizontal"></i>
+                      <select id="volumeMode">
+                        <option value="fixed" selected>🎯 Fixed Target per Day</option>
+                        <option value="range">🎲 Min–Max Random Range per Day</option>
+                        <option value="weighted">⚡ Per-Weekday Weighted Caps</option>
+                      </select>
+                      <i class="ph-bold ph-caret-down select-caret"></i>
+                    </div>
+
+                    <!-- MODE 1: FIXED TARGET -->
+                    <div id="modeFixedWrapper" class="field-grid" style="margin-top: 10px;">
+                      <label>
+                        Daily Commit Target
+                        <div class="input-wrap">
+                          <i class="ph ph-hash"></i>
+                          <input type="number" id="dailyCount" min="1" step="1" value="5" />
+                        </div>
+                      </label>
+                    </div>
+
+                    <!-- MODE 2: MIN-MAX RANGE -->
+                    <div id="modeRangeWrapper" class="field-grid two-col hidden" style="margin-top: 10px;">
+                      <label>
+                        Min Commits/Day
+                        <div class="input-wrap">
+                          <i class="ph ph-minus-circle"></i>
+                          <input type="number" id="minPerDay" min="1" step="1" value="1" />
+                        </div>
+                      </label>
+                      <label>
+                        Max Commits/Day
+                        <div class="input-wrap">
+                          <i class="ph ph-plus-circle"></i>
+                          <input type="number" id="maxPerDay" min="1" step="1" value="8" />
+                        </div>
+                      </label>
+                      <div class="range-hint-badge" style="grid-column: 1 / -1;">
+                        <i class="ph-bold ph-dice-five"></i> Active days will receive a random count between <strong id="minHintVal">1</strong> and <strong id="maxHintVal">8</strong> commits.
+                      </div>
+                    </div>
+
+                    <!-- MODE 3: PER-WEEKDAY WEIGHTED CAPS -->
+                    <div id="modeWeightedWrapper" class="hidden" style="margin-top: 10px;">
+                      <label class="compact-label">Custom Weekday Counts (Mon–Sun)</label>
+                      <div class="day-grid compact-inputs">
+                        <div class="mini-input-group" data-wrapper="monday">
+                          <span>Mon</span>
+                          <input type="number" min="0" step="1" value="5" data-weekday="monday" />
+                        </div>
+                        <div class="mini-input-group" data-wrapper="tuesday">
+                          <span>Tue</span>
+                          <input type="number" min="0" step="1" value="5" data-weekday="tuesday" />
+                        </div>
+                        <div class="mini-input-group" data-wrapper="wednesday">
+                          <span>Wed</span>
+                          <input type="number" min="0" step="1" value="5" data-weekday="wednesday" />
+                        </div>
+                        <div class="mini-input-group" data-wrapper="thursday">
+                          <span>Thu</span>
+                          <input type="number" min="0" step="1" value="5" data-weekday="thursday" />
+                        </div>
+                        <div class="mini-input-group" data-wrapper="friday">
+                          <span>Fri</span>
+                          <input type="number" min="0" step="1" value="5" data-weekday="friday" />
+                        </div>
+                        <div class="mini-input-group" data-wrapper="saturday">
+                          <span>Sat</span>
+                          <input type="number" min="0" step="1" value="5" data-weekday="saturday" />
+                        </div>
+                        <div class="mini-input-group" data-wrapper="sunday">
+                          <span>Sun</span>
+                          <input type="number" min="0" step="1" value="5" data-weekday="sunday" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- DAY FILTER MODES -->
+                  <div class="inner-panel" style="margin-top: 10px;">
+                    <label class="compact-label">Day Filter Mode</label>
+                    <div class="input-wrap select-wrap">
+                      <i class="ph ph-funnel"></i>
+                      <select id="filterMode">
+                        <option value="all">All days</option>
+                        <option value="odd">Odd days</option>
+                        <option value="even">Even days</option>
+                        <option value="weekends">Weekends only</option>
+                        <option value="weekdays">Weekdays only</option>
+                        <option value="selected">Selected weekdays</option>
+                      </select>
+                      <i class="ph-bold ph-caret-down select-caret"></i>
+                    </div>
+
+                    <div id="selectedDays" class="day-grid hidden" style="margin-top: 8px;">
+                      <label class="check-box-label"><input type="checkbox" value="monday" checked /> Mon</label>
+                      <label class="check-box-label"><input type="checkbox" value="tuesday" checked /> Tue</label>
+                      <label class="check-box-label"><input type="checkbox" value="wednesday" checked /> Wed</label>
+                      <label class="check-box-label"><input type="checkbox" value="thursday" checked /> Thu</label>
+                      <label class="check-box-label"><input type="checkbox" value="friday" checked /> Fri</label>
+                      <label class="check-box-label"><input type="checkbox" value="saturday" /> Sat</label>
+                      <label class="check-box-label"><input type="checkbox" value="sunday" /> Sun</label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- TAB 2: REALISM ENGINE -->
+                <div class="tab-pane hidden" id="tabRealism">
+                  <div class="inner-panel realism-panel">
+                    <div class="slider-row">
+                      <label for="timeJitter">
+                        <span>Human Time Jitter (±<strong id="jitterVal">15</strong> min variation)</span>
+                        <input type="range" id="timeJitter" min="0" max="60" value="15" step="5" />
+                      </label>
+                    </div>
+
+                    <div class="input-wrap select-wrap" style="margin-top: 10px;">
+                      <i class="ph ph-text-t"></i>
+                      <select id="commitMessagePattern">
+                        <option value="default">Default Message ("Auto commit N — Date Time")</option>
+                        <option value="conventional">Conventional Commits ("feat: update module", "fix: resolve bug", etc.)</option>
+                        <option value="custom">Custom Message List (One per line)</option>
+                      </select>
+                      <i class="ph-bold ph-caret-down select-caret"></i>
+                    </div>
+
+                    <div id="customMessagesWrapper" class="hidden" style="margin-top: 8px;">
+                      <textarea id="customMessagesList" rows="4" placeholder="feat: update dashboard UI&#10;fix: correct token calculation&#10;docs: update README instructions"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- TAB 3: REPOSITORY & BRANCH -->
+                <div class="tab-pane hidden" id="tabRepo">
+                  <div class="field-grid two-col">
+                    <label>
+                      Repo Owner
+                      <div class="input-wrap">
+                        <i class="ph ph-user"></i>
+                        <input type="text" id="repoOwner" placeholder="your GitHub username" />
+                      </div>
+                    </label>
+
+                    <label>
+                      Target Repository
+                      <div class="input-wrap select-wrap">
+                        <i class="ph ph-folder-notch"></i>
+                        <select id="repoName" required>
+                          <option value="" disabled selected>Loading repositories...</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down select-caret"></i>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="field-grid two-col" style="margin-top: 10px;">
+                    <label>
+                      Target Branch
+                      <div class="input-wrap">
+                        <i class="ph ph-git-commit"></i>
+                        <input type="text" id="branch" value="main" />
+                      </div>
+                    </label>
+
+                    <label>
+                      Target File Path
+                      <div class="input-wrap">
+                        <i class="ph ph-file-code"></i>
+                        <input type="text" id="targetFilePath" value="commit-log.json" placeholder="e.g. commit-log.json" />
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- EXECUTION CONTROLS & SUBMIT -->
+                <div class="execution-desk">
+                  <div class="split-controls">
+                    <label class="toggle-switch-label">
+                      <div class="toggle-switch">
+                        <input type="checkbox" id="randomize" checked />
+                        <span class="slider"></span>
+                      </div>
+                      Randomize volume
+                    </label>
+
+                    <label class="toggle-switch-label">
+                      <div class="toggle-switch">
+                        <input type="checkbox" id="pushToRemote" checked />
+                        <span class="slider"></span>
+                      </div>
+                      Push to remote
+                    </label>
+                  </div>
+
+                  <button type="submit" class="primary-button neon-button submit-button" style="margin-top: 12px; width: 100%;">
+                    <i class="ph-bold ph-lightning"></i> Generate & Execute Schedule
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- RIGHT COLUMN: ANALYTICS & HEATMAP STUDIO -->
+            <div class="studio-right">
+              <!-- FLOATING STAT CARDS -->
+              <div class="studio-stats-header">
+                <div class="h-stat-card">
+                  <span class="h-stat-label">Planned Commits</span>
+                  <span id="hmTotalCommits" class="h-stat-val">0</span>
+                </div>
+                <div class="h-stat-card">
+                  <span class="h-stat-label">Active Days</span>
+                  <span id="hmActiveDays" class="h-stat-val">0</span>
+                </div>
+                <div class="h-stat-card">
+                  <span class="h-stat-label">Peak/Day</span>
+                  <span id="hmPeakCommits" class="h-stat-val">0</span>
+                </div>
+              </div>
+
+              <!-- 52-WEEK HEATMAP STUDIO -->
+              <div class="heatmap-studio-card inner-panel">
+                <div class="heatmap-header-title">
+                  <span><i class="ph-bold ph-squares-four"></i> Contribution Graph Studio</span>
+                  <span class="heatmap-tip-badge"><i class="ph-bold ph-cursor-click"></i> Click cell to inspect</span>
+                </div>
+
+                <div class="heatmap-scroll-container">
+                  <div id="heatmapMonthHeader" class="heatmap-month-header"></div>
+                  <div id="heatmapGrid" class="heatmap-grid"></div>
+                </div>
+
+                <div class="heatmap-legend-bar">
+                  <span>Less</span>
+                  <span class="legend-cell level-0"></span>
+                  <span class="legend-cell level-1"></span>
+                  <span class="legend-cell level-2"></span>
+                  <span class="legend-cell level-3"></span>
+                  <span class="legend-cell level-4"></span>
+                  <span>More</span>
+                </div>
+              </div>
+
+              <div class="preset-action-bar">
+                <button type="button" id="exportPresetBtn" class="ghost-button"><i class="ph-bold ph-export"></i> Export Presets</button>
+                <label class="ghost-button file-input-label">
+                  <i class="ph-bold ph-file-arrow-up"></i> Import Presets
+                  <input type="file" id="importPresetFile" accept=".json" class="hidden-file-input" />
+                </label>
+              </div>
+
+              <div id="result" class="result hidden" style="margin-top: 12px;"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- MODAL FOR CELL INSPECTION -->
+      <div id="cellInspectModal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel" style="max-width: 480px;">
+          <div class="modal-header">
+            <h3><i class="ph-bold ph-magnifying-glass"></i> Day Details Inspector</h3>
+            <button type="button" class="close-modal-btn" id="closeInspectModalBtn">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="inspect-day-header">
+              <div id="inspectDate" class="inspect-date">2026-08-19</div>
+              <div id="inspectWeekday" class="inspect-weekday">Wednesday</div>
+            </div>
+            <div class="inspect-commit-badge" id="inspectCommitBadge">
+              <i class="ph-bold ph-git-commit"></i> <span id="inspectCount">5</span> Planned Commits
+            </div>
+            <div class="inspect-sample-list" id="inspectSampleList">
+              <!-- Dynamically populated sample commit times -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="primary-button neon-button" id="closeInspectDoneBtn" style="width: 100%;">Close Inspector</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL FOR DYNAMIC BACKEND API CONFIGURATION -->
+      <div id="apiConfigModal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel">
+          <div class="modal-header">
+            <h3><i class="ph-bold ph-gear"></i> API & OAuth Settings</h3>
+            <button type="button" class="close-modal-btn" id="closeApiModalBtn">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>Configure backend API and GitHub OAuth credentials for authentication.</p>
+            <label>
+              GitHub OAuth Client ID (Optional for custom OAuth Apps)
+              <div class="input-wrap">
+                <i class="ph ph-shield-check"></i>
+                <input type="text" id="customClientIdInput" placeholder="e.g. Iv1.xxxxxxxxxxxxxxxx" />
+              </div>
+            </label>
+            <label style="margin-top: 12px;">
+              Backend API Base URL
+              <div class="input-wrap">
+                <i class="ph ph-globe"></i>
+                <input type="url" id="customApiUrlInput" placeholder="Leave empty for default domain (e.g. http://localhost:3000)" />
+              </div>
+            </label>
+            <p class="input-tip">Default: Relative `/api` paths.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="resetApiUrlBtn" class="ghost-button">Reset to Default</button>
+            <button type="button" id="saveApiUrlBtn" class="primary-button neon-button">Save Settings</button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="page-foot">
+        <p><i class="ph-bold ph-terminal-window"></i> GitPulse • Precision GitHub Engine • Created by <a href="https://ny-portfolio-ai.vercel.app" target="_blank" rel="noopener noreferrer" class="author-link">Yatharth Nagpal</a></p>
+      </footer>
+    </div>
+
+    <script src="/script.js"></script>
+  </body>
+</html>

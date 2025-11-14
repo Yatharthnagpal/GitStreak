@@ -1,0 +1,21 @@
+{
+  "name": "gitpulse",
+  "version": "2.0.0",
+  "description": "GitPulse — Precision GitHub Contribution Engine created by Yatharth Nagpal",
+  "author": "Yatharth Nagpal",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "npx vercel dev",
+    "start": "node api/index.js",
+    "check": "node --input-type=module -e \"import('./api/index.js').then(m => console.log(typeof m.default)).catch(err => { console.error(err); process.exit(1); })\""
+  },
+  "dependencies": {
+    "moment": "^2.30.1"
+  }
+}
+
+
