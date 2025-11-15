@@ -2,3 +2,9 @@
 node_modules
 .env
 .env.local
+
+.vercel
+favicon.ico
+favicon.png
+gitpulse_logo.png
+pr

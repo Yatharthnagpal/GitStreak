@@ -1,4 +1,4 @@
-const DEFAULT_BASE_URL = 'https://app-commit-ten.vercel.app';
+const DEFAULT_BASE_URL = 'https://gitpulse-ny.vercel.app';
 
 function getApiBaseUrl() {
   const custom = localStorage.getItem("commitflow_custom_api");

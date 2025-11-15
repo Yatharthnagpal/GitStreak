@@ -142,6 +142,6 @@ We encourage you to review this Privacy Policy periodically for any changes. You
 If you have any questions or concerns about this Privacy Policy or the data practices of the Extension, you can contact us at:
 
 **Developer:** Yatharth Nagpal  
-**Email:** yatharth.nagpal@example.com  
-**Project repository:** https://github.com/YatharthNagpal/CommitFlow
+**Email:** nagpalyatharth99@gmail.com
+**Project repository:** https://github.com/Yatharthnagpal/GitPulse
 

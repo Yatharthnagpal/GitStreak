@@ -697,7 +697,8 @@ export default async function handler(req, res) {
 
     const protocol = req.headers['x-forwarded-proto'] || 'https';
     const host = req.headers.host || 'localhost:3000';
-    const baseUrl = process.env.APP_BASE_URL || `${protocol}://${host}`;
+    const rawBaseUrl = process.env.APP_BASE_URL || `${protocol}://${host}`;
+    const baseUrl = rawBaseUrl.replace(/\/+$/, '');
     const redirectUri = encodeURIComponent(`${baseUrl}/api/auth/callback`);
     const loginUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=repo%20read:user%20user:email`;
     res.writeHead(302, { Location: loginUrl });
@@ -853,6 +854,7 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   });
 
   server.listen(PORT, () => {
-    console.log(`⚡ GitPulse Full-Stack Server running at http://localhost:${PORT}`);
+    const displayUrl = process.env.APP_BASE_URL || `http://localhost:${PORT}`;
+    console.log(`⚡ GitPulse Full-Stack Server running at ${displayUrl}`);
   });
 }
