@@ -110,20 +110,116 @@ function setSignedInState(user) {
   updateHeatmapPreview();
 }
 
-// ─── Default Date Helper ────────────────────────────────────────────────────
+// ─── Date Menu Dropdowns & Apply Schedule System ─────────────────────────────
+
+function initDateMenuDropdowns() {
+  const startDay = document.getElementById("startDay");
+  const startMonth = document.getElementById("startMonth");
+  const startYear = document.getElementById("startYear");
+  const endDay = document.getElementById("endDay");
+  const endMonth = document.getElementById("endMonth");
+  const endYear = document.getElementById("endYear");
+
+  if (!startDay || !endDay) return;
+
+  // Days 1..31
+  let dayOptions = '';
+  for (let d = 1; d <= 31; d++) {
+    const val = String(d).padStart(2, '0');
+    dayOptions += `<option value="${val}">${d}</option>`;
+  }
+  startDay.innerHTML = dayOptions;
+  endDay.innerHTML = dayOptions;
+
+  // Months 01..12
+  const monthNames = [
+    { num: '01', name: '01 - Jan' },
+    { num: '02', name: '02 - Feb' },
+    { num: '03', name: '03 - Mar' },
+    { num: '04', name: '04 - Apr' },
+    { num: '05', name: '05 - May' },
+    { num: '06', name: '06 - Jun' },
+    { num: '07', name: '07 - Jul' },
+    { num: '08', name: '08 - Aug' },
+    { num: '09', name: '09 - Sep' },
+    { num: '10', name: '10 - Oct' },
+    { num: '11', name: '11 - Nov' },
+    { num: '12', name: '12 - Dec' }
+  ];
+  let monthOptions = '';
+  monthNames.forEach(m => {
+    monthOptions += `<option value="${m.num}">${m.name}</option>`;
+  });
+  startMonth.innerHTML = monthOptions;
+  endMonth.innerHTML = monthOptions;
+
+  // Years (2015 to 2035)
+  let yearOptions = '';
+  for (let y = 2015; y <= 2035; y++) {
+    yearOptions += `<option value="${y}">${y}</option>`;
+  }
+  startYear.innerHTML = yearOptions;
+  endYear.innerHTML = yearOptions;
+
+  // Add change listeners to sync dropdown selections -> hidden ISO date inputs
+  [startDay, startMonth, startYear, endDay, endMonth, endYear].forEach(selectEl => {
+    if (selectEl) {
+      selectEl.addEventListener('change', () => {
+        syncDateDropdownsToInputs();
+        // We intentionally DO NOT trigger updateHeatmapPreview here!
+        // The user clicks the "Apply Date Range" button to calculate.
+      });
+    }
+  });
+}
+
+function syncDateDropdownsToInputs() {
+  const sDay = document.getElementById("startDay")?.value || '01';
+  const sMon = document.getElementById("startMonth")?.value || '01';
+  const sYr = document.getElementById("startYear")?.value || new Date().getFullYear();
+
+  const eDay = document.getElementById("endDay")?.value || '01';
+  const eMon = document.getElementById("endMonth")?.value || '01';
+  const eYr = document.getElementById("endYear")?.value || new Date().getFullYear();
+
+  const startDateEl = document.getElementById("startDate");
+  const endDateEl = document.getElementById("endDate");
+
+  if (startDateEl) startDateEl.value = `${sYr}-${sMon}-${sDay}`;
+  if (endDateEl) endDateEl.value = `${eYr}-${eMon}-${eDay}`;
+}
+
+function setDateMenuFromISO(startDateStr, endDateStr) {
+  if (startDateStr) {
+    const parts = startDateStr.split('-');
+    if (parts.length === 3) {
+      if (document.getElementById("startYear")) document.getElementById("startYear").value = parts[0];
+      if (document.getElementById("startMonth")) document.getElementById("startMonth").value = parts[1];
+      if (document.getElementById("startDay")) document.getElementById("startDay").value = parts[2];
+    }
+  }
+  if (endDateStr) {
+    const parts = endDateStr.split('-');
+    if (parts.length === 3) {
+      if (document.getElementById("endYear")) document.getElementById("endYear").value = parts[0];
+      if (document.getElementById("endMonth")) document.getElementById("endMonth").value = parts[1];
+      if (document.getElementById("endDay")) document.getElementById("endDay").value = parts[2];
+    }
+  }
+  syncDateDropdownsToInputs();
+}
 
 function initDefaultDates() {
-  const startInput = document.getElementById("startDate");
-  const endInput = document.getElementById("endDate");
+  initDateMenuDropdowns();
 
-  if (startInput && !startInput.value) {
-    const d = new Date();
-    d.setMonth(d.getMonth() - 1);
-    startInput.value = d.toISOString().split('T')[0];
-  }
-  if (endInput && !endInput.value) {
-    endInput.value = new Date().toISOString().split('T')[0];
-  }
+  const now = new Date();
+  const endDateStr = now.toISOString().split('T')[0];
+
+  const past = new Date(now);
+  past.setMonth(past.getMonth() - 1);
+  const startDateStr = past.toISOString().split('T')[0];
+
+  setDateMenuFromISO(startDateStr, endDateStr);
 }
 
 async function fetchRepos() {
@@ -641,7 +737,7 @@ function renderHeatmapMonthHeaders() {
 }
 
 const formInputsToTrack = [
-  "startDate", "endDate", "dailyCount", "maxPerDay", "filterMode", "randomize"
+  "dailyCount", "maxPerDay", "filterMode", "randomize"
 ];
 formInputsToTrack.forEach(id => {
   const el = document.getElementById(id);
@@ -650,6 +746,37 @@ formInputsToTrack.forEach(id => {
     el.addEventListener('input', updateHeatmapPreview);
   }
 });
+
+const applyScheduleBtn = document.getElementById("applyScheduleBtn");
+if (applyScheduleBtn) {
+  applyScheduleBtn.addEventListener('click', () => {
+    syncDateDropdownsToInputs();
+    const startDateVal = document.getElementById("startDate")?.value;
+    const endDateVal = document.getElementById("endDate")?.value;
+
+    if (!startDateVal || !endDateVal) return;
+    const start = new Date(startDateVal);
+    const end = new Date(endDateVal);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime()) || end < start) {
+      alert("Please select a valid date window (Start Date must be before or equal to End Date).");
+      return;
+    }
+
+    const origText = applyScheduleBtn.innerHTML;
+    applyScheduleBtn.innerHTML = '<i class="ph-bold ph-spinner spinner"></i> Calculating Schedule...';
+    applyScheduleBtn.disabled = true;
+
+    setTimeout(() => {
+      updateHeatmapPreview();
+      applyScheduleBtn.innerHTML = '<i class="ph-bold ph-check-circle"></i> Applied & Calculated!';
+      applyScheduleBtn.disabled = false;
+      setTimeout(() => {
+        applyScheduleBtn.innerHTML = origText;
+      }, 1800);
+    }, 50);
+  });
+}
 
 document.querySelectorAll("[data-weekday]").forEach(el => {
   el.addEventListener('change', updateHeatmapPreview);
@@ -707,8 +834,9 @@ if (importPresetFile) {
       try {
         const preset = JSON.parse(event.target.result);
 
-        if (preset.startDate) document.getElementById("startDate").value = preset.startDate;
-        if (preset.endDate) document.getElementById("endDate").value = preset.endDate;
+        if (preset.startDate || preset.endDate) {
+          setDateMenuFromISO(preset.startDate || "", preset.endDate || "");
+        }
         if (preset.dailyCount !== undefined) document.getElementById("dailyCount").value = preset.dailyCount;
         if (preset.maxPerDay !== undefined) document.getElementById("maxPerDay").value = preset.maxPerDay;
         if (preset.randomize !== undefined) document.getElementById("randomize").checked = preset.randomize;
@@ -1002,57 +1130,121 @@ if (form) {
       }
     }
 
-    const start = new Date(payload.startDate);
-    const end = new Date(payload.endDate);
-    const differenceDays = Math.max(1, Math.ceil((end - start) / 86400000) + 1);
-    const estimatedTotal = Math.max(1, Math.round((payload.dailyCount || 1) * differenceDays));
-    const startedAt = Date.now();
-    let completed = 0;
+    const chunks = createDateChunks(payload.startDate, payload.endDate, 14);
+    let aggregatedResults = {
+      success: true,
+      pushToRemote: payload.pushToRemote,
+      summary: {
+        repoOwner: payload.repoOwner,
+        repoName: payload.repoName,
+        branch: payload.branch || 'main',
+        totalCommits: 0,
+        activeDays: 0,
+        startDate: payload.startDate,
+        endDate: payload.endDate,
+      },
+      created: [],
+    };
 
+    const startTime = Date.now();
     resultBox.classList.remove('hidden');
     resultBox.className = 'result';
-    resultBox.innerHTML = "Generating commits... <span class='progress'>0/" + estimatedTotal + " · Estimating...</span>";
-
-    const progressTimer = setInterval(() => {
-      completed = Math.min(completed + 1, estimatedTotal);
-      const eta = estimateProgress(startedAt, estimatedTotal, completed);
-      const node = resultBox.querySelector(".progress");
-      if (node) node.textContent = `${completed}/${estimatedTotal} · ${eta}`;
-    }, 800);
+    resultBox.innerHTML = "Processing schedule... <span class='progress'>Batch 1 of " + chunks.length + " · Estimating time left...</span>";
 
     try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      for (let i = 0; i < chunks.length; i += 1) {
+        if (i > 0) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+        const chunk = chunks[i];
+        const chunkPayload = {
+          ...payload,
+          startDate: chunk.startDate,
+          endDate: chunk.endDate,
+        };
 
-      const contentType = response.headers.get("content-type");
-      let data;
-      if (contentType && contentType.includes("application/json")) {
-        data = await response.json();
-      } else {
-        const textError = await response.text();
-        throw new Error(`Server error (${response.status}): The request may have timed out.`);
+        const progressNode = resultBox.querySelector(".progress");
+        if (progressNode) {
+          if (i === 0) {
+            progressNode.textContent = `Batch 1 of ${chunks.length} (${chunk.startDate} → ${chunk.endDate}) · Estimating time left...`;
+          } else {
+            const elapsedMs = Date.now() - startTime;
+            const avgMsPerBatch = elapsedMs / i;
+            const remainingBatches = chunks.length - i;
+            const remainingSec = Math.ceil((remainingBatches * avgMsPerBatch) / 1000);
+            const timeLeftStr = formatTimeLeft(remainingSec);
+            progressNode.textContent = `Batch ${i + 1} of ${chunks.length} (${chunk.startDate} → ${chunk.endDate}) · ~${timeLeftStr}`;
+          }
+        }
+
+        const response = await fetch(buildApiUrl("/api/generate"), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(chunkPayload),
+        });
+
+        const contentType = response.headers.get("content-type");
+        let data;
+        if (contentType && contentType.includes("application/json")) {
+          data = await response.json();
+        } else {
+          throw new Error(`Server error (${response.status}) on Batch ${i + 1}/${chunks.length}. The request may have timed out.`);
+        }
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || `Error processing Batch ${i + 1}/${chunks.length}`);
+        }
+
+        if (data.summary) {
+          aggregatedResults.summary.totalCommits += (data.summary.totalCommits || 0);
+          aggregatedResults.summary.activeDays += (data.summary.activeDays || 0);
+        }
+        if (data.created && Array.isArray(data.created)) {
+          aggregatedResults.created.push(...data.created);
+        }
       }
 
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || "Something went wrong.");
-      }
-
-      clearInterval(progressTimer);
-      renderSuccess(data);
+      renderSuccess(aggregatedResults);
     } catch (error) {
-      clearInterval(progressTimer);
-      renderError(error.message);
-    } finally {
-      setSubmitting(false);
       renderError(error.message);
     } finally {
       setSubmitting(false);
     }
   });
+}
 
-  initializeApp();
+function formatTimeLeft(seconds) {
+  if (seconds <= 0) return 'Almost done...';
+  if (seconds < 60) return `${seconds}s left`;
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}m ${secs}s left`;
+}
+
+function createDateChunks(startDateStr, endDateStr, maxDaysPerChunk = 14) {
+  const chunks = [];
+  let currStart = new Date(startDateStr);
+  const finalEnd = new Date(endDateStr);
+
+  while (currStart <= finalEnd) {
+    let currEnd = new Date(currStart);
+    currEnd.setDate(currEnd.getDate() + (maxDaysPerChunk - 1));
+    if (currEnd > finalEnd) {
+      currEnd = new Date(finalEnd);
+    }
+
+    chunks.push({
+      startDate: currStart.toISOString().split('T')[0],
+      endDate: currEnd.toISOString().split('T')[0],
+    });
+
+    currStart = new Date(currEnd);
+    currStart.setDate(currStart.getDate() + 1);
+  }
+
+  return chunks;
+}
+
+initializeApp();

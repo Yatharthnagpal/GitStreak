@@ -78,23 +78,44 @@ function resolveGitHubIdentity(user = {}, env = process.env) {
   return { login, id, email, accessToken, repoOwner, repoName };
 }
 
-// ─── Enhanced fetch with contextual error messages ──────────────────────────
+// ─── Enhanced fetch with contextual error messages & rate-limit retries ──────
 
-async function fetchJson(url, init = {}) {
-  const response = await fetch(url, {
-    ...init,
-    headers: {
-      Accept: 'application/json',
-      'User-Agent': 'CommitFlow',
-      ...(init.headers || {}),
-    },
-  });
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-  const contentType = response.headers.get('content-type') || '';
-  const payload = contentType.includes('application/json') ? await response.json() : await response.text();
+async function fetchJson(url, init = {}, retries = 3) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const response = await fetch(url, {
+      ...init,
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'GitPulse',
+        ...(init.headers || {}),
+      },
+    });
 
-  if (!response.ok) {
+    const contentType = response.headers.get('content-type') || '';
+    const payload = contentType.includes('application/json') ? await response.json() : await response.text();
+
+    if (response.ok) {
+      return payload;
+    }
+
     const detail = typeof payload === 'string' ? payload : payload.message || '';
+    const isSecondaryRateLimit =
+      response.status === 403 &&
+      (detail.includes('secondary rate limit') || detail.includes('exceeded a secondary rate limit'));
+    const isRateLimited = response.status === 429 || isSecondaryRateLimit;
+
+    if (isRateLimited && attempt < retries) {
+      const retryAfterHeader = response.headers.get('retry-after');
+      const waitSeconds = retryAfterHeader ? parseInt(retryAfterHeader, 10) : 60;
+      console.warn(`[GitHub Safety Guard] Secondary rate limit threshold approached on ${urlPath}. Pausing for ${waitSeconds}s to keep account 100% safe (Attempt ${attempt + 1}/${retries})...`);
+      await delay(waitSeconds * 1000);
+      continue;
+    }
+
     const urlPath = new URL(url).pathname;
     const statusText = response.status === 404
       ? `Not found: ${urlPath}`
@@ -102,14 +123,14 @@ async function fetchJson(url, init = {}) {
         ? `Validation failed for ${urlPath}: ${detail}`
         : response.status === 409
           ? `Conflict (SHA mismatch) on ${urlPath}: ${detail}`
-          : `GitHub API error ${response.status} on ${urlPath}: ${detail}`;
+          : isSecondaryRateLimit
+            ? `GitHub Secondary Rate Limit hit on ${urlPath}. Please wait 1-2 minutes before retrying.`
+            : `GitHub API error ${response.status} on ${urlPath}: ${detail}`;
     const error = new Error(statusText);
     error.status = response.status;
     error.detail = detail;
     throw error;
   }
-
-  return payload;
 }
 
 // ─── Auth helpers ───────────────────────────────────────────────────────────
@@ -550,6 +571,10 @@ async function generateCommits(payload, req) {
     currentTreeSha = await createTree(repoOwner, repoName, currentTreeSha, commitLogPath, blobSha, token);
 
     for (let i = 0; i < plannedCommits.length; i += 1) {
+      if (i > 0) {
+        const jitterMs = 15 + Math.floor(Math.random() * 20);
+        await delay(jitterMs);
+      }
       const item = plannedCommits[i];
       const authorInfo = {
         name: user.login,

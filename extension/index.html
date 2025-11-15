@@ -229,22 +229,49 @@
 
                 <!-- TAB 1: SCHEDULE & RANGE -->
                 <div class="tab-pane active" id="tabSchedule">
-                  <div class="field-grid two-col">
-                    <label>
-                      Start Date
-                      <div class="input-wrap">
-                        <i class="ph ph-calendar"></i>
-                        <input type="date" id="startDate" required />
+                  <div class="date-selector-panel glass-panel" style="padding: 14px; margin-bottom: 14px; border-radius: var(--radius-md);">
+                    <!-- START DATE MENU BAR -->
+                    <div class="date-menu-group">
+                      <label class="date-menu-label"><i class="ph-bold ph-calendar-blank" style="color:var(--accent-color);"></i> Start Date (Day / Month / Year)</label>
+                      <div class="date-menu-bar">
+                        <div class="input-wrap date-select-wrap">
+                          <select id="startDay" title="Start Day"></select>
+                        </div>
+                        <div class="input-wrap date-select-wrap">
+                          <select id="startMonth" title="Start Month"></select>
+                        </div>
+                        <div class="input-wrap date-select-wrap">
+                          <select id="startYear" title="Start Year"></select>
+                        </div>
                       </div>
-                    </label>
+                    </div>
 
-                    <label>
-                      End Date
-                      <div class="input-wrap">
-                        <i class="ph ph-calendar"></i>
-                        <input type="date" id="endDate" required />
+                    <!-- END DATE MENU BAR -->
+                    <div class="date-menu-group" style="margin-top: 12px;">
+                      <label class="date-menu-label"><i class="ph-bold ph-calendar-check" style="color:var(--accent-color);"></i> End Date (Day / Month / Year)</label>
+                      <div class="date-menu-bar">
+                        <div class="input-wrap date-select-wrap">
+                          <select id="endDay" title="End Day"></select>
+                        </div>
+                        <div class="input-wrap date-select-wrap">
+                          <select id="endMonth" title="End Month"></select>
+                        </div>
+                        <div class="input-wrap date-select-wrap">
+                          <select id="endYear" title="End Year"></select>
+                        </div>
                       </div>
-                    </label>
+                    </div>
+
+                    <!-- HIDDEN ISO DATE INPUTS -->
+                    <input type="hidden" id="startDate" />
+                    <input type="hidden" id="endDate" />
+
+                    <!-- APPLY SCHEDULE BUTTON -->
+                    <div class="apply-schedule-container">
+                      <button type="button" id="applyScheduleBtn" class="apply-schedule-btn">
+                        <i class="ph-bold ph-play-circle"></i> Apply Date Range & Calculate Studio
+                      </button>
+                    </div>
                   </div>
 
                   <!-- VOLUME MODE SELECTOR -->
