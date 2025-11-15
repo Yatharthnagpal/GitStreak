@@ -1,8 +1,8 @@
-# Privacy Policy for APP_Commit Browser Extension
+# Privacy Policy for GitPulse Browser Extension
 
-_Last updated: 01 August 2026_
+_Last updated: 15 November 2025_
 
-Thank you for using **APP_Commit** (the “Extension”).  
+Thank you for using **GitPulse** (the “Extension”).  
 This Privacy Policy explains what data the Extension collects, how it is used, and what choices you have.
 
 By installing or using the Extension, you agree to the collection and use of information in accordance with this Privacy Policy.
@@ -11,7 +11,7 @@ By installing or using the Extension, you agree to the collection and use of inf
 
 ## 1. Overview
 
-APP_Commit is a developer productivity tool that helps you view and manage GitHub commit information and related deployment status from a connected web application (CommitFlow) directly inside your browser.
+GitPulse is a developer productivity tool that helps you view and manage GitHub commit information and related deployment status from a connected web application (GitPulse) directly inside your browser.
 
 The Extension is designed to collect **only the minimum data necessary** to provide its core functionality.
 
