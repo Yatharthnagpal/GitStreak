@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root[data-theme="cyan"] {
+  --accent-color: #22D3EE;
+  --accent-muted: rgba(34, 211, 238, 0.15);
+  --accent-glow: rgba(34, 211, 238, 0.35);
+  --accent-border: rgba(34, 211, 238, 0.3);
+  --accent-text: #67E8F9;
+}
+
+:root[data-theme="emerald"] {
+  --accent-color: #34D399;
+  --accent-muted: rgba(52, 211, 153, 0.15);
+  --accent-glow: rgba(52, 211, 153, 0.35);
+  --accent-border: rgba(52, 211, 153, 0.3);
+  --accent-text: #6EE7B7;
+}
+
+:root[data-theme="purple"] {
+  --accent-color: #A78BFA;
+  --accent-muted: rgba(167, 139, 250, 0.15);
+  --accent-glow: rgba(167, 139, 250, 0.35);
+  --accent-border: rgba(167, 139, 250, 0.3);
+  --accent-text: #C4B5FD;
+}
+
+:root[data-theme="amber"] {
+  --accent-color: #FBBF24;
+  --accent-muted: rgba(251, 191, 36, 0.15);
+  --accent-glow: rgba(251, 191, 36, 0.35);
+  --accent-border: rgba(251, 191, 36, 0.3);
+  --accent-text: #FDE047;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #07090C;
+  color: #F3F4F6;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Glassmorphism utility classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-panel-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-hover:hover {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.glass-card {
+  background: rgba(16, 20, 26, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Accent highlight elements */
+.accent-border-active {
+  border-color: var(--accent-border) !important;
+  box-shadow: 0 0 20px -5px var(--accent-glow);
+}
+
+.accent-bg-active {
+  background-color: var(--accent-muted) !important;
+  color: var(--accent-text) !important;
+}
+
+.accent-glow-button {
+  background: var(--accent-color);
+  color: #07090C;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.accent-glow-button:hover {
+  box-shadow: 0 0 24px 0 var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #07090C;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Background Ambient Orbs */
+.glow-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.25;
+  transition: background 0.5s ease;
+}
+
+.orb-primary {
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: var(--accent-glow);
+}
+
+.orb-secondary {
+  bottom: -150px;
+  left: -150px;
+  width: 600px;
+  height: 600px;
+  background: rgba(167, 139, 250, 0.15);
+}

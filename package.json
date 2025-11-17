@@ -1,21 +1,14 @@
 {
-  "name": "gitpulse",
+  "name": "gitstreak",
   "version": "2.0.0",
-  "description": "GitPulse — Precision GitHub Contribution Engine created by Yatharth Nagpal",
+  "description": "GitStreak — Precision GitHub Contribution Engine created by Yatharth Nagpal",
   "author": "Yatharth Nagpal",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": ">=18"
-  },
   "scripts": {
-    "dev": "npx vercel dev",
-    "start": "node api/index.js",
-    "check": "node --input-type=module -e \"import('./api/index.js').then(m => console.log(typeof m.default)).catch(err => { console.error(err); process.exit(1); })\""
-  },
-  "dependencies": {
-    "moment": "^2.30.1"
+    "dev:backend": "cd backend && uvicorn main:app --reload --port 8000",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "start:backend": "cd backend && uvicorn main:app --host 0.0.0.0 --port 8000"
   }
 }
-
-

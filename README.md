@@ -1,44 +1,35 @@
-# GitPulse — Precision GitHub Contribution Engine
+# GitStreak — Precision GitHub Contribution Engine
 
 **Created & Developed by Yatharth Nagpal**
 
-GitPulse is a state-of-the-art GitHub contribution engine and activity scheduler. Featuring a rich dark glassmorphic interface, dynamic color themes, 1-click preset strategy cards, real-time heatmap preview with interactive cell inspection, commit realism options (human time jitter, conventional commit generator), and direct serverless integration with GitHub's Git Database API.
+GitStreak is a state-of-the-art GitHub contribution engine and activity scheduler built on a modern decoupled architecture (**Next.js 14+ React App Router** frontend and **Python 3.10+ FastAPI** backend). Featuring a Linear/Vercel-inspired dark glassmorphic interface, dynamic theme accents (*Electric Cyan*, *Matrix Emerald*, *Cyber Purple*, *Solar Gold*), interactive 52-week contribution heatmap with cell inspection drawer, 5 automated preset strategy cards, 3-step safe schedule execution workflow, and direct serverless integration with GitHub's Git REST Database API (`/git/blobs`, `/trees`, `/commits`, `/refs`).
 
 ---
 
 ## Key Features
 
-- **OAuth 2.0 & Personal Access Token Security**: Seamless GitHub OAuth handshake with optional PAT token sign-in fallback.
-- **1-Click Quick Preset Strategies**: Instantly configure schedules for *Consistent Daily Coder*, *Weekday Shift*, *Weekend Warrior*, *Random Heavy Burst*, or *Light Touch*.
-- **Interactive Contribution Heatmap Preview**: Live 52-week visual contribution graph with cell inspection modal.
-- **Dynamic Theme Accent Switcher**: Switch between **Electric Cyan**, **Matrix Emerald**, **Cyber Purple**, and **Solar Gold** UI themes.
-- **Commit Realism Engine**:
-  - Human Time Jitter (`±0-60 min`) to make commit times naturally human-like.
-  - Conventional Commits message generator (`feat:`, `fix:`, `docs:`, `refactor:`).
-  - Configurable target file path.
-- **Preset Export & Import**: Save and restore scheduling presets in `.json` format.
-- **True Git Backdating**: Direct integration with `/git/trees`, `/git/blobs`, and `/git/commits` APIs.
-- **Chrome Extension Included**: Complete extension suite under `extension/` directory.
+- **GitHub OAuth 2.0 & PAT Token Security**: Seamless GitHub OAuth handshake with optional Personal Access Token sign-in fallback.
+- **Target Repository Select Dropdown**: Fetch real GitHub user repositories directly via API and auto-detect default branches (`main`, `master`).
+- **5 Automated Preset Strategy Cards**:
+  1. *Consistent Daily*: Fixed commit count for all days.
+  2. *Weekday Shift*: Random commits Mon–Fri, 0 on weekends.
+  3. *Weekend Warrior*: Random commits Sat–Sun, 0 on weekdays.
+  4. *Random Burst*: Random commits whole week.
+  5. *Light Touch*: Minimal 1–3 commits whole week.
+- **Interactive 52-Week Contribution Heatmap**: Live 365-day visual contribution graph with slide-over inspection drawer.
+- **⌘K Command Palette**: Fast keyboard navigation, search, and theme switching.
+- **Commit Realism Engine**: Human time jitter (`±0–60 min`) and conventional commit generator (`feat:`, `fix:`, `docs:`, `refactor:`).
+- **True Git Backdating**: Direct integration with `/git/trees`, `/git/blobs`, and `/git/commits` APIs with secondary rate-limit safety guards.
 
 ---
 
-## Local Development & Deployment
+## Development & Architecture
 
-```bash
-# Install dependencies
-npm install
-
-# Run backend syntax check
-npm run check
-
-# Start local dev server
-npx http-server . -p 3000
-```
-
----
+```text
+git-streak/
+├── backend/          # Python 3.10+ FastAPI API Server 
+└── frontend/         # Next.js 14+ React Web App 
 
 ## Author
 
 **Yatharth Nagpal** — Creator & Core Architect
-
-
