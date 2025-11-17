@@ -1,147 +1,100 @@
-# Privacy Policy for GitPulse Browser Extension
+# Privacy Policy & Copyright Notice for GitStreak / GitPulse
 
-_Last updated: 15 November 2025_
+_Last updated: 21 August 2026_  
+_Created & Authored by Yatharth Nagpal_
 
-Thank you for using **GitPulse** (the “Extension”).  
-This Privacy Policy explains what data the Extension collects, how it is used, and what choices you have.
+Copyright © 2025–2026 **Yatharth Nagpal**. All rights reserved.
 
-By installing or using the Extension, you agree to the collection and use of information in accordance with this Privacy Policy.
+Thank you for using **GitStreak** (also known as **GitPulse**), a state-of-the-art precision GitHub contribution engine and activity scheduler built on a decoupled architecture featuring **Next.js 14+ React App Router** and **Python 3.10+ FastAPI**.
 
----
-
-## 1. Overview
-
-GitPulse is a developer productivity tool that helps you view and manage GitHub commit information and related deployment status from a connected web application (GitPulse) directly inside your browser.
-
-The Extension is designed to collect **only the minimum data necessary** to provide its core functionality.
+This Privacy Policy & Copyright Notice explains what data the Application processes, how it is secured, and your rights and controls as a user.
 
 ---
 
-## 2. Data We Collect
+## 1. Copyright & Intellectual Property
 
-Depending on how you use the Extension, we may process the following categories of data:
+- **Author & Creator:** Yatharth Nagpal
+- **Application Name:** GitStreak / GitPulse — Precision GitHub Contribution Engine
+- **Repository:** https://github.com/Yatharthnagpal/GitPulse
+- **Production Web Application:** https://gitpulse-ny.vercel.app
 
-### 2.1 GitHub Account and Repository Data
-
-When you connect GitHub through the Extension and the associated web app:
-
-- GitHub username
-- Public profile information
-- Repository names and owner information
-- Commit metadata (such as commit messages, hashes, timestamps, and authors)
-- Branch names and related repository configuration
-
-This data is obtained via the GitHub API and is used solely to display and manage your repository and commit information within the Extension and the connected web app.
-
-### 2.2 Authentication Data (Tokens)
-
-To access GitHub on your behalf, the Extension and/or backend may store:
-
-- OAuth access tokens or similar authentication credentials
-
-These tokens are used strictly to authenticate API requests to GitHub and are **never sold or shared** with third parties except as required to operate the service (for example, hosting providers processing data on our behalf).
-
-### 2.3 User Preferences and Local Settings
-
-The Extension may store configuration and UI preferences in the browser’s storage, such as:
-
-- Selected or last-used repository
-- UI theme and layout preferences
-- Basic configuration flags and feature toggles
-
-This information is stored locally in your browser using the extension storage APIs (for example, `chrome.storage` or `browser.storage`) and is used only to provide a better user experience.
+All original source code, UI designs, brand visual assets, heatmap algorithms, commit jitter engines, and documentation associated with GitStreak/GitPulse are the exclusive intellectual property of **Yatharth Nagpal**. Unauthorized copying, modification, redistribution, or commercial resale without explicit written permission is strictly prohibited.
 
 ---
 
-## 3. How We Use Your Data
+## 2. Overview & Architecture
 
-We use the collected data for the following purposes:
+GitStreak is a developer productivity platform designed to help developers visualize, curate, and schedule GitHub contribution activity using direct, serverless integration with GitHub’s Git REST Database API (`/git/blobs`, `/trees`, `/commits`, `/refs`).
 
-- To display your GitHub repositories and commit information in the Extension
-- To communicate with the associated web application backend (such as deployment or status endpoints)
-- To maintain your session and authentication state
-- To provide, maintain, and improve the functionality and performance of the Extension
-- To diagnose and fix bugs or errors
-
-We do **not** use your data for advertising, profiling, or selling to third parties.
+The Application is engineered around a **privacy-first philosophy**: it processes **only the minimal data necessary** to authenticate your session and execute requested commit scheduling tasks on your specified GitHub repositories.
 
 ---
 
-## 4. Data Sharing and Third Parties
+## 3. Data We Collect & Process
 
-We may share limited data with third-party services only as necessary to operate the Extension and the associated backend:
+Depending on how you authenticate and interact with GitStreak, the Application processes the following categories of data:
 
-- **Hosting providers** (for example, cloud or serverless platforms) that process data on our behalf to run APIs and services
-- **GitHub** as a data source and destination for repository and commit operations you explicitly perform
+### 3.1 GitHub Account & Repository Data
+When you sign in via GitHub OAuth 2.0 or supply a Personal Access Token (PAT):
+- GitHub Username and User ID
+- Public profile avatar URL and display name
+- Public/Private repository list (for target repository selection)
+- Branch information (e.g., `main`, `master`)
+- Commit metadata (commit messages, timestamps, commit author details)
 
-We do **not** sell or rent your personal data to any third parties.
+This data is retrieved via the official GitHub REST API solely to render your 52-week activity heatmap, display repository options, and execute commit backdating workflows.
 
-Any third-party services are bound by their own privacy policies, which govern how they handle your data.
+### 3.2 Authentication Credentials & Tokens
+To interact with GitHub on your behalf:
+- **OAuth Access Tokens**: Generated during the official GitHub OAuth handshake.
+- **Personal Access Tokens (PAT)**: Optional sign-in credentials provided directly by you.
 
----
+Authentication sessions are securely encoded in browser cookies/session state. Tokens are **never shared, published, or sold** to third parties.
 
-## 5. Data Storage and Security
-
-- Authentication tokens and preferences may be stored securely in browser storage and/or backend storage systems.
-- We take reasonable technical and organizational measures to protect your data against unauthorized access, modification, or destruction.
-
-However, no method of transmission over the internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your data, we cannot guarantee absolute security.
-
----
-
-## 6. Data Retention
-
-We retain data only for as long as necessary to provide the Extension’s functionality or as required by law.
-
-- Browser-stored preferences remain until you uninstall the Extension or clear the extension data.
-- Authentication tokens and related session data may be invalidated or deleted when you disconnect GitHub, revoke access, or uninstall the Extension.
-
-You may also revoke the Extension’s access to your GitHub account at any time through your GitHub account settings.
+### 3.3 User Preferences & UI State
+The Application stores local UI configuration preferences in browser local storage or session cookies, including:
+- Selected theme preset (*Electric Cyan*, *Matrix Emerald*, *Cyber Purple*, *Solar Gold*)
+- Heatmap inspection drawer state
+- Selected target repository and branch parameters
 
 ---
 
-## 7. Your Choices and Controls
+## 4. How We Use Your Data
 
-You have the following options:
+We process data exclusively for the following operational purposes:
+- To authenticate your session and verify GitHub permissions.
+- To display your live 52-week contribution heatmap and activity statistics.
+- To construct and execute direct GitHub API tree/blob commit workflows.
+- To maintain system performance, diagnose errors, and enforce safe secondary rate-limit safety guards.
 
-- **Uninstall the Extension**  
-  You can remove the Extension at any time from your browser’s extension management page. This stops all data collection by the Extension.
-
-- **Revoke GitHub access**  
-  You can revoke OAuth permissions from your GitHub account settings, which invalidates the Extension’s access tokens.
-
-- **Clear extension data**  
-  You can clear local storage and cached data via your browser’s settings or the Extension’s options page (if provided).
+We do **NOT** perform user tracking, sell user data, run third-party advertising, or construct behavioral profiles.
 
 ---
 
-## 8. Children’s Privacy
+## 5. Third-Party Services & Infrastructure
 
-The Extension is intended for use by developers and is **not** directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If you believe that a child has provided us with personal information, please contact us so that we can delete it.
+GitStreak interacts with the following trusted service providers strictly to deliver service functionality:
+- **GitHub API** ([https://api.github.com](https://api.github.com)): Primary data provider and destination for user-authorized Git operations.
+- **Vercel** ([https://vercel.com](https://vercel.com)): Serverless hosting provider for Next.js frontend rendering and Python FastAPI backend API routing.
 
----
-
-## 9. International Data Transfers
-
-Depending on your location and the location of our servers and service providers, your data may be processed in countries that may have data protection laws different from those in your jurisdiction.
-
-By using the Extension, you consent to the transfer of information to countries outside your country of residence, which may have different data protection rules.
+All third-party services operate under their respective security and privacy policies.
 
 ---
 
-## 10. Changes to This Privacy Policy
+## 6. Data Security & Retention
 
-We may update this Privacy Policy from time to time to reflect changes in the Extension’s functionality, legal requirements, or best practices. When we do, we will update the “Last updated” date at the top of this document.
+- **Security Measures**: All network communication is enforced over encrypted HTTPS/TLS connections. Sensitive tokens and cookies are handled with modern browser security flags (`SameSite`, `Secure`, `HttpOnly` where applicable).
+- **Data Retention**: GitStreak does not store persistent databases of your repository code or personal commit history. Session data expires upon sign-out or session invalidation.
 
-We encourage you to review this Privacy Policy periodically for any changes. Your continued use of the Extension after changes are posted constitutes your acceptance of the updated policy.
+You may revoke GitStreak’s GitHub access permissions at any time via your [GitHub Applications Settings](https://github.com/settings/applications).
 
 ---
 
-## 11. Contact Us
+## 7. Contact Information
 
-If you have any questions or concerns about this Privacy Policy or the data practices of the Extension, you can contact us at:
+For legal inquiries, permissions, or support regarding GitStreak / GitPulse, please contact:
 
-**Developer:** Yatharth Nagpal  
-**Email:** nagpalyatharth99@gmail.com
-**Project repository:** https://github.com/Yatharthnagpal/GitPulse
-
+- **Author & Architect:** Yatharth Nagpal
+- **Email:** nagpalyatharth99@gmail.com
+- **GitHub Profile:** https://github.com/Yatharthnagpal
+- **Project Repository:** https://github.com/Yatharthnagpal/GitPulse
