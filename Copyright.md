@@ -1,11 +1,11 @@
-# Privacy Policy & Copyright Notice for GitStreak / GitPulse
+# Privacy Policy & Copyright Notice for GitStreak
 
 _Last updated: 21 August 2026_  
 _Created & Authored by Yatharth Nagpal_
 
 Copyright © 2025–2026 **Yatharth Nagpal**. All rights reserved.
 
-Thank you for using **GitStreak** (also known as **GitPulse**), a state-of-the-art precision GitHub contribution engine and activity scheduler built on a decoupled architecture featuring **Next.js 14+ React App Router** and **Python 3.10+ FastAPI**.
+Thank you for using **GitStreak** , a state-of-the-art precision GitHub contribution engine and activity scheduler built on a decoupled architecture featuring **Next.js 14+ React App Router** and **Python 3.10+ FastAPI**.
 
 This Privacy Policy & Copyright Notice explains what data the Application processes, how it is secured, and your rights and controls as a user.
 
@@ -14,11 +14,11 @@ This Privacy Policy & Copyright Notice explains what data the Application proces
 ## 1. Copyright & Intellectual Property
 
 - **Author & Creator:** Yatharth Nagpal
-- **Application Name:** GitStreak / GitPulse — Precision GitHub Contribution Engine
-- **Repository:** https://github.com/Yatharthnagpal/GitPulse
-- **Production Web Application:** https://gitpulse-ny.vercel.app
+- **Application Name:** GitStreak — Precision GitHub Contribution Engine
+- **Repository:** https://github.com/Yatharthnagpal/GitStreak
+- **Production Web Application:** https://gitstreak-ny.vercel.app
 
-All original source code, UI designs, brand visual assets, heatmap algorithms, commit jitter engines, and documentation associated with GitStreak/GitPulse are the exclusive intellectual property of **Yatharth Nagpal**. Unauthorized copying, modification, redistribution, or commercial resale without explicit written permission is strictly prohibited.
+All original source code, UI designs, brand visual assets, heatmap algorithms, commit jitter engines, and documentation associated with GitStreak are the exclusive intellectual property of **Yatharth Nagpal**. Unauthorized copying, modification, redistribution, or commercial resale without explicit written permission is strictly prohibited.
 
 ---
 
@@ -92,9 +92,9 @@ You may revoke GitStreak’s GitHub access permissions at any time via your [Git
 
 ## 7. Contact Information
 
-For legal inquiries, permissions, or support regarding GitStreak / GitPulse, please contact:
+For legal inquiries, permissions, or support regarding GitStreak , please contact:
 
 - **Author & Architect:** Yatharth Nagpal
 - **Email:** nagpalyatharth99@gmail.com
 - **GitHub Profile:** https://github.com/Yatharthnagpal
-- **Project Repository:** https://github.com/Yatharthnagpal/GitPulse
+- **Project Repository:** https://github.com/Yatharthnagpal/GitStreak

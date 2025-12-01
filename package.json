@@ -6,9 +6,14 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "npm run dev:frontend",
+    "dev:all": "npx concurrently -k -p \"[{name}]\" -n \"backend,frontend\" -c \"yellow,cyan\" \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && uvicorn main:app --reload --port 8000",
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
     "start:backend": "cd backend && uvicorn main:app --host 0.0.0.0 --port 8000"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
   }
 }

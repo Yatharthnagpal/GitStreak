@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/gitpulse_logo.png', type: 'image/png' },
-      { url: '/favicon.ico' },
     ],
     shortcut: '/gitpulse_logo.png',
     apple: '/gitpulse_logo.png',
